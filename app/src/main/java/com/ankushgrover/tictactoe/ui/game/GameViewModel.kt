@@ -86,7 +86,7 @@ class GameViewModel : ViewModel() {
 
     private fun checkRows(): State {
         for (i in 0..2) {
-            if (matrix[i][0] == matrix[i][1] && matrix[i][1] == matrix[i][2]) {
+            if (matrix[i][0] == matrix[i][1] && matrix[i][1] == matrix[i][2] && matrix[i][0] != State.EMPTY) {
                 return matrix[i][0]
             }
         }
@@ -95,7 +95,7 @@ class GameViewModel : ViewModel() {
 
     private fun checkCols(): State {
         for (i in 0..2) {
-            if (matrix[0][i] == matrix[1][i] && matrix[1][i] == matrix[2][i]) {
+            if (matrix[0][i] == matrix[1][i] && matrix[1][i] == matrix[2][i] && matrix[0][i] != State.EMPTY) {
                 return matrix[0][i]
             }
         }
@@ -103,10 +103,10 @@ class GameViewModel : ViewModel() {
     }
 
     private fun checkDiagonals(): State {
-        if (matrix[0][0] == matrix[1][1] && matrix[1][1] == matrix[2][2]) {
+        if (matrix[0][0] == matrix[1][1] && matrix[1][1] == matrix[2][2] && matrix[0][0] != State.EMPTY) {
             return matrix[0][0]
         }
-        if (matrix[0][2] == matrix[1][1] && matrix[1][1] == matrix[2][0]) {
+        if (matrix[0][2] == matrix[1][1] && matrix[1][1] == matrix[2][0] && matrix[0][2] != State.EMPTY) {
             return matrix[0][2]
         }
         return State.EMPTY

@@ -9,4 +9,8 @@
     <string name="secon_player">Secon Player</string>
     <string name="o_s">O\'s:</string>
     <string name="x_s">X\'s:</string>
+    <string name="play_again">Play Again</string>
+    <string name="o_won">O\nWon!</string>
+    <string name="x_won">X\nWon!</string>
+    <string name="draw">It\'s a\ndraw</string>
 </resources>

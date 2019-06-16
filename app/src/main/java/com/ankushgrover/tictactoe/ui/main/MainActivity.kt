@@ -12,7 +12,9 @@ import com.ankushgrover.tictactoe.ui.game.GameFragment
 import com.ankushgrover.tictactoe.ui.game.State
 import com.ankushgrover.tictactoe.ui.start.StartFragment
 
-class MainActivity : AppCompatActivity(), StartFragment.StartFragmentListener, GameFragment.GameListener {
+class MainActivity : AppCompatActivity(), StartFragment.StartFragmentListener, GameFragment.GameListener,
+    EndGameFragment.EndGameListener {
+
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var currentFragment: BaseFragment
@@ -33,21 +35,16 @@ class MainActivity : AppCompatActivity(), StartFragment.StartFragmentListener, G
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         mainViewModel.winnerData.observe(this, Observer {
-            if (it == State.O) {
-                Toast.makeText(this, "O won", Toast.LENGTH_SHORT).show()
-            } else if (it == State.X)
-                Toast.makeText(this, "X won", Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(this, "Draw", Toast.LENGTH_SHORT).show()
-
-
-
             replaceFragment(EndGameFragment(), true)
         })
     }
 
     override fun startGame() {
         replaceFragment(GameFragment(), true)
+    }
+
+    override fun playAgain() {
+        replaceFragment(StartFragment(), true)
     }
 
     private fun replaceFragment(fragment: BaseFragment, addTransitions: Boolean) {
