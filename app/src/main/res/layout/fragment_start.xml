@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:id="@+id/fl_score_container"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/font_concert"
+            android:gravity="center"
+            android:text="@string/tic_tac_toe"
+            android:textColor="@android:color/black"
+            app:autoSizeTextType="uniform"/>
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="@dimen/normal"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <fragment
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fagmentScore"
+                android:name="com.ankushgrover.tictactoe.ui.score.ScoreFragment"/>
+
+        <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:id="@+id/btnStart"
+                android:text="@string/start_game"
+                android:layout_marginTop="@dimen/large"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
