@@ -27,4 +27,8 @@ class MainViewModel : ViewModel() {
             XScoreData.value = XScoreData.value?.plus(1)
     }
 
+    fun endGame() {
+        winnerData.value = State.EMPTY
+    }
+
 }

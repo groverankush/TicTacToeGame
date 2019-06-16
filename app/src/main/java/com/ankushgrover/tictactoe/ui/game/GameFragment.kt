@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.ankushgrover.tictactoe.R
@@ -50,6 +51,8 @@ class GameFragment : BaseFragment(), View.OnClickListener {
         initViewModels()
         makeCoordinateIdMap()
         initListeners(view)
+        if (savedInstanceState != null)
+            initViews(view)
 
     }
 
@@ -59,6 +62,25 @@ class GameFragment : BaseFragment(), View.OnClickListener {
         }
 
         gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+    }
+
+    private fun initViews(view: View) {
+        gameViewModel.recentMoves.forEach {
+            setButtonText(it)
+        }
+    }
+
+    private fun setButtonText(point: Point) {
+        val btn = view?.findViewById<Button>(point.id)
+        btn?.text = if (point.state == State.X) "X" else if (point.state == State.O) "O" else ""
+        activity?.let {
+            btn?.setTextColor(
+                ContextCompat.getColor(
+                    it,
+                    if (point.state == State.O) R.color.oColor else R.color.xColor
+                )
+            )
+        }
     }
 
     private fun initListeners(view: View) {
@@ -75,10 +97,12 @@ class GameFragment : BaseFragment(), View.OnClickListener {
         fabUndo.setOnClickListener { gameViewModel.undo() }
 
         gameViewModel.errorData.observe(this, Observer { Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show() })
-        gameViewModel.undoMove.observe(this, Observer { view.findViewById<Button>(it.id).text = "" })
+        gameViewModel.undoMove.observe(this, Observer { setButtonText(it) })
         gameViewModel.winnerData.observe(this, Observer {
-            mainViewModel.updateScore(it)
-        })
+            mainViewModel.updateScore(it) })
+        gameViewModel.moveData.observe(this, Observer {
+            setButtonText(it) })
+
     }
 
     private fun makeCoordinateIdMap() {
@@ -98,7 +122,6 @@ class GameFragment : BaseFragment(), View.OnClickListener {
         val button = v as Button
 
         if (button.text.isNullOrEmpty()) {
-            button.text = if (gameViewModel.isXTurn) "X" else "O"
             val pair = coordinateIdMap.get(button.id)
             gameViewModel.turn(pair!!.first, pair.second, button.id)
         }

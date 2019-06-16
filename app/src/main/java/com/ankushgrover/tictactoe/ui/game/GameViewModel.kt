@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 class GameViewModel : ViewModel() {
 
     var isXTurn = true
-    private val recentMoves = arrayListOf<Point>()
+    val recentMoves = arrayListOf<Point>()
     private var matrix: Array<Array<State>> = arrayOf(
         arrayOf(State.EMPTY, State.EMPTY, State.EMPTY),
         arrayOf(State.EMPTY, State.EMPTY, State.EMPTY),
@@ -15,6 +15,7 @@ class GameViewModel : ViewModel() {
 
     val winnerData = MutableLiveData<State>()
     val undoMove = MutableLiveData<Point>()
+    val moveData = MutableLiveData<Point>()
     val errorData = MutableLiveData<String>()
 
     /**
@@ -31,6 +32,7 @@ class GameViewModel : ViewModel() {
         matrix[x][y] = p.state
 
         recentMoves.add(p)
+        moveData.value = p
 
         isXTurn = !isXTurn
 
@@ -52,6 +54,8 @@ class GameViewModel : ViewModel() {
             recentMoves.remove(point)
             // undo last turn
             isXTurn = !isXTurn
+            // set point state as empty
+            point.state = State.EMPTY
             // post removed value
             undoMove.value = point
         }
@@ -81,7 +85,7 @@ class GameViewModel : ViewModel() {
         }
 
         if (recentMoves.size == 9)
-            winnerData.value = State.EMPTY
+            winnerData.value = State.DRAW
     }
 
     private fun checkRows(): State {

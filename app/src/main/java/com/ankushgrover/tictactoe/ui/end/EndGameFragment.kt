@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.ankushgrover.tictactoe.R
 import com.ankushgrover.tictactoe.base.BaseFragment
@@ -51,21 +50,23 @@ class EndGameFragment : BaseFragment() {
             mainViewModel = ViewModelProviders.of(it).get(MainViewModel::class.java)
         }
 
-        btnStart.setOnClickListener { mListener.playAgain() }
+        btnStart.setOnClickListener {
+            mainViewModel.endGame()
+            mListener.playAgain()
+        }
     }
 
     private fun initObservers() {
 
-        mainViewModel.winnerData.observe(this, Observer {
 
-            message.setText(
-                when (it) {
-                    State.O -> R.string.o_won
-                    State.X -> R.string.x_won
-                    State.EMPTY -> R.string.draw
-                }
-            )
-        })
+        message.setText(
+            when (mainViewModel.winnerData.value!!) {
+                State.O -> R.string.o_won
+                State.X -> R.string.x_won
+                else -> R.string.draw
+            }
+        )
+
     }
 
     interface EndGameListener {

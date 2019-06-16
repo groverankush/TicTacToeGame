@@ -1,7 +1,6 @@
 package com.ankushgrover.tictactoe.ui.main
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,6 +15,8 @@ class MainActivity : AppCompatActivity(), StartFragment.StartFragmentListener, G
     EndGameFragment.EndGameListener {
 
 
+    private val KEY_CURRENT_FRAGMENT = "keyCurrentFragment"
+
     private lateinit var mainViewModel: MainViewModel
     private lateinit var currentFragment: BaseFragment
 
@@ -24,18 +25,34 @@ class MainActivity : AppCompatActivity(), StartFragment.StartFragmentListener, G
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
+        if (savedInstanceState != null) {
+            currentFragment =
+                supportFragmentManager.getFragment(savedInstanceState, KEY_CURRENT_FRAGMENT) as BaseFragment
+            replaceFragment(currentFragment, false)
+        } else
+            replaceFragment(StartFragment(), false)
+
         init()
 
-        replaceFragment(StartFragment(), false)
 
+    }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+
+        outState?.let {
+            supportFragmentManager.putFragment(outState, KEY_CURRENT_FRAGMENT, currentFragment)
+        }
     }
 
     private fun init() {
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         mainViewModel.winnerData.observe(this, Observer {
-            replaceFragment(EndGameFragment(), true)
+            if (it != State.EMPTY)
+                replaceFragment(EndGameFragment(), true)
         })
     }
 
@@ -50,6 +67,7 @@ class MainActivity : AppCompatActivity(), StartFragment.StartFragmentListener, G
     private fun replaceFragment(fragment: BaseFragment, addTransitions: Boolean) {
         replaceFragment(fragment, addTransitions, false)
     }
+
 
     private fun replaceFragment(fragment: BaseFragment, addTransitions: Boolean, addToBackStack: Boolean) {
         currentFragment = fragment
