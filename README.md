@@ -1,2 +1,2 @@
 # TicTacToeGame
-A POC for classic Tic Tac Toe
+Tic Tac Toe Game developed using MVVM architecture.
